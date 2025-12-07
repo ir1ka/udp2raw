@@ -1,3 +1,6 @@
+.file "x64.S"
+.section .note.GNU-stack,"",@progbits
+
 .text	
 
 
