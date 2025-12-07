@@ -1,8 +1,8 @@
-#note: experimental
+#note: experimental (build for amd64_hw_aes)
 #      currently only used for generating `compile_commands.json` for clangd.
 #      to build this project, it's suggested to use `makefile` instead
 
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.10)
 project(udp2raw)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
