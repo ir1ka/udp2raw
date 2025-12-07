@@ -8,8 +8,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 11)
 
+execute_process(
+    COMMAND make git_version -C ${CMAKE_SOURCE_DIR}
+)
+
+enable_language(ASM)
+
 set(SOURCE_FILES
-        main.cpp 
+        main.cpp
         lib/md5.cpp
         lib/pbkdf2-sha1.cpp
         lib/pbkdf2-sha256.cpp
@@ -22,14 +28,26 @@ set(SOURCE_FILES
         fd_manager.cpp
         client.cpp
         server.cpp
-        lib/aes_faster_c/aes.cpp
-        lib/aes_faster_c/wrapper.cpp
+        lib/aes_acc/aesacc.c
+        lib/aes_acc/aesarm.c
+        lib/aes_acc/aesni.c
         my_ev.cpp
+        lib/aes_acc/asm/x64.S
 )
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -Wno-missing-field-initializers -O2 -g -fsanitize=address,undefined")
 
 add_executable(udp2raw ${SOURCE_FILES})
+target_compile_options(udp2raw PRIVATE
+    -Wall
+    -Wextra
+    -Wno-unused-variable
+    -Wno-unused-parameter
+    -Wno-missing-field-initializers
+)
+target_link_options(udp2raw PRIVATE
+    -static
+)
 target_link_libraries(udp2raw rt)
 target_link_libraries(udp2raw pthread)
+target_link_libraries(udp2raw gcc_eh)
 include_directories(SYSTEM "libev")
 include_directories(".")
